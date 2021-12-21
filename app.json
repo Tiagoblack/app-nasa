@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "projets_primary",
-    "slug": "projets_primary",
+    "name": "dev_nasa",
+    "slug": "dev_nasa",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,10 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+      },
+      "package": "com.tiago321.dev_nasa"
     }
   }
 }

@@ -1,11 +1,34 @@
-import React from 'react';
-import { Text, View, SafeAreaView, StyleSheet, ImageBackground } from 'react-native';
-import {useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import { Text, View, SafeAreaView, StyleSheet, ImageBackground, Animated } from 'react-native';
+import {useRoute, useNavigation} from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Ionicons } from '@expo/vector-icons';
+
 
  const Field = () => {
-    const  route = useRoute()
-   const  {date, url, title, explanation} = route.params.obj
+    const [transX] = useState(new Animated.Value(-100));
+    const [opacity] = useState(new Animated.Value(0));
+    const navigation = useNavigation();    
+    const route = useRoute();
+    const {date, url, title, explanation} = route.params.obj
+
+    const handleGoBack = () =>{
+        navigation.goBack()
+    }
+
+    useEffect(()=>{
+        Animated.timing(transX,{
+            toValue:0,
+            duration:1000,
+            useNativeDriver:true
+        }).start();
+        Animated.timing(opacity,{
+            toValue:1,
+            duration:1000,
+            useNativeDriver:true
+        }).start();
+    },[])
+
     return (
         <View style={[StyleSheet.absoluteFillObject, styles.container]}>
             <ImageBackground
@@ -20,10 +43,25 @@ import { LinearGradient } from 'expo-linear-gradient';
                     end={{x:0, y:.5}}         
                     locations={[0.0, 0.5]}                
                 >
-                    <Text style={styles.title} >{title}</Text>
-                    <Text style={styles.date}>{date}</Text>
-                    <Text style={styles.desc}>{explanation}</Text>
-
+                    <Ionicons 
+                    style={styles.icon} 
+                    name="md-arrow-back-circle-sharp" 
+                    size={40} 
+                    color="#fff"
+                    onPress={handleGoBack}                    
+                    />
+                    <Animated.Text 
+                        style={[{transform:[{translateX:transX}], opacity},styles.title]}>
+                            {title}
+                        </Animated.Text>
+                    <Animated.Text 
+                        style={[[{transform:[{translateX:transX}], opacity,},styles.date]]}>
+                        {date}
+                    </Animated.Text>
+                    <Animated.Text 
+                        numberOfLines={20} style={[{transform:[{translateX:transX}], opacity},styles.desc]}>
+                        {explanation}
+                    </Animated.Text>
                 </LinearGradient>
                 </ImageBackground>
         </View>
@@ -44,23 +82,31 @@ const styles = StyleSheet.create({
         flex:1,
 
     },
+    icon:{
+        marginLeft:20,
+        marginTop:30,
+
+    },
     title:{
         fontSize:30,
-        marginTop:100,
-        marginLeft:30,
+        marginTop:30,
+        marginLeft:20,
         fontWeight:'bold',
         color:'#fff',
-        maxWidth:500
+        maxWidth:350,
+        lineHeight: 1.4*30,
     },
     date:{
         fontSize:20,
         margin:30,
-        color:'#fff'
+        marginLeft:20,
+        color:'#fff',
     },
     desc:{
         color:'#eee',
         fontSize:15,
-        margin:30
+        marginLeft:20,
+        lineHeight:1.4*15,
     }
 })
 
